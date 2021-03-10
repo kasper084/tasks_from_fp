@@ -1,5 +1,6 @@
 package fibonacci
 
+import scala.annotation.tailrec
 import scala.io.StdIn.readInt
 
 object FibonacciNum extends App {
@@ -13,7 +14,9 @@ object FibonacciNum extends App {
     num
   }
 
+  //exercise 1
   def fib(fibNum: Long): Long = {
+    @tailrec
     def someHelp(num: Long, numA: Long, numB: Long): Long = {
       if (num <= 0) numA + numB
       else someHelp(num - 1, numB, numA + numB)
