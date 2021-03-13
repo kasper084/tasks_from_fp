@@ -12,14 +12,19 @@ object SortSome extends App {
       else if (gt(as(num), as(num))) goLooping(num + 1)
       else false
 
-    goLooping(0)
+    goLooping(10)
   }
+
+  //exercise 3
+  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = (b:B) => f(a,b)
 
   //exercise 4
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
     a => b => f(a, b)
 
-  //exercise 5 - should be something like exercise 4, we take "a" and "b" and split them f(a)(b)
+  //exercise 5 - should be something like exercise 4
+  def uncurry[A,B,C](f: A => B => C): (A, B) => C =
+    (a, b) => f(a)(b)
 
   //exercise 6
   def compose[A,B,C](f: B => C, g: A => B): A => C =
