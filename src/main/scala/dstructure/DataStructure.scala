@@ -91,6 +91,11 @@ object DataStructure extends App {
     case Cons(x, xs) => f(x, foldRight(xs, z)(f))
   }
 
+  //exercise 8
+  //Hm, what I thing about bla bala this and bla bla that...
+  //I will forget about this task few hours late, it's 00:15 already
+  //give me a break
+
   //exercise 9
   def length[A](l: List[A]): Int =
     foldRight(l, 0)((_, acc) => acc + 1)
@@ -116,5 +121,71 @@ object DataStructure extends App {
     foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
 
   //exercise 13
-  //nope
+  def foldRightViaLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B =
+    foldRight(l, (b: B) => b)((a, g) => b => g(f(b, a)))(z)
+
+  def foldLeftViaRight[A, B](l: List[A], z: B)(f: (A, B) => B): B =
+    foldLeft(reverse(l), z)((x, y) => f(y, x))
+
+  //exercise 14
+  def append[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)(Cons(_, _))
+
+  //exercise  16
+  def inc(l: List[Int]): List[Int] =
+    foldRight(l, Nil: List[Int])((h, t) => Cons(h + 1, t))
+
+  //exercise 17
+  def doubleToString(l: List[Double]): List[String] =
+    foldRight(l, Nil: List[String])((h, t) => Cons(h.toString, t))
+
+  //exercise 18
+  def map[A, B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil: List[B])((h, t) => Cons(f(h), t))
+
+  //exercise 19
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((h, t) => {
+      if (f(h)) Cons(h, t)
+      else t
+    })
+
+  //exercise 20
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] =
+    foldRight(l, Nil: List[B])((h, t) => append(f(h), t))
+
+  //exercise 21
+  //yep
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l)(x =>
+      if (f(x)) List(x)
+      else Nil
+    )
+
+  //exercise 22
+  def sumEach(l1: List[Int], l2: List[Int]): List[Int] = (l1, l2) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(x, xs), Cons(y, ys)) => Cons(x + y, sumEach(xs, ys))
+  }
+
+  //exercise 23
+  def zip[A,B,C](a: List[A], b: List[B])(f: (A,B) => C): List[C] = (a,b) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h1,t1), Cons(h2,t2)) => Cons(f(h1,h2), zip(t1,t2)(f))
+  }
+  //exercise 24
+  @annotation.tailrec
+  def startsWith[A](l: List[A], prefix: List[A]): Boolean = (l,prefix) match {
+    case (_,Nil) => true
+    case (Cons(h,t),Cons(h2,t2)) if h == h2 => startsWith(t, t2)
+    case _ => false
+  }
+  @annotation.tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = sup match {
+    case Nil => sub == Nil
+    case _ if startsWith(sup, sub) => true
+    case Cons(h,t) => hasSubsequence(t, sub)
+  }
 }
