@@ -37,8 +37,21 @@ trait Option[+A] {
     a flatMap (aa => b map (bb => f(aa, bb)))
 
   //exercise 4
-
+  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = {
+   s matches(map2(pat1, pat2))
+  }
 
   //exercise 5
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
+    a match {
+      case Nil => Some(Nil)
+      case h :: t => h flatMap (hh => sequence(t) map (hh :: _))
+    }
 
+  //exercise 6
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a match {
+      case Nil => Some(Nil)
+      case h :: t => map2(f(h), traverse(t)(f))(_ :: _)
+    }
 }

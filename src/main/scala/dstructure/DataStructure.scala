@@ -2,6 +2,8 @@ package dstructure
 
 import DataStructure.List.x
 
+import scala.annotation.tailrec
+
 object DataStructure extends App {
 
   trait List[+A]
@@ -70,8 +72,10 @@ object DataStructure extends App {
     }
 
   //exercise 5
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
-    case Cons(h, t) if f(h) => dropWhile(t, f)
+  @tailrec
+  def dropWhile[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) if f(x) => dropWhile(xs)(f)
     case _ => l
   }
 
